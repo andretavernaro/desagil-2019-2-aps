@@ -24,6 +24,7 @@ public class View extends JPanel implements ActionListener {
 
         add(menu);
         addGateView(0);
+
         menu.addActionListener(this);
 
     }
@@ -34,11 +35,13 @@ public class View extends JPanel implements ActionListener {
 
         gateView = new GateView(gate);
 
+
         add(gateView);
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
+
 
         remove(gateView);
 
@@ -49,3 +52,4 @@ public class View extends JPanel implements ActionListener {
         ((JFrame) SwingUtilities.getRoot(this)).pack();
     }
 }
+

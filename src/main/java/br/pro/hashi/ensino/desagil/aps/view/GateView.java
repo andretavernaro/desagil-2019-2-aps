@@ -1,9 +1,12 @@
+// FONTE DAS IMAGENS: https://en.wikipedia.org/wiki/Logic_gate (domínio público)
+
 package br.pro.hashi.ensino.desagil.aps.view;
 
 import br.pro.hashi.ensino.desagil.aps.model.Gate;
 import br.pro.hashi.ensino.desagil.aps.model.Switch;
 
 import javax.swing.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -51,10 +54,12 @@ public class GateView extends JPanel implements ActionListener {
 
         output.setEnabled(false);
 
+
         update();
     }
 
     private void update() {
+
         if (inputA.isSelected()) {
             SWA.turnOn();
         }
@@ -76,3 +81,4 @@ public class GateView extends JPanel implements ActionListener {
         update();
     }
 }
+
