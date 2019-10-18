@@ -6,92 +6,79 @@ import br.pro.hashi.ensino.desagil.aps.model.Gate;
 import br.pro.hashi.ensino.desagil.aps.model.Switch;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.net.URL;
 
-public class GateView extends FixedPanel implements ItemListener {
-    private static final int BORDER = 10;
-    private static final int SWITCH_SIZE = 18;
-    private static final int GATE_WIDTH = 90;
-    private static final int GATE_HEIGHT = 60;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-    private final Switch[] switches;
+
+public class GateView extends JPanel implements ActionListener {
+
     private final Gate gate;
-    private final JCheckBox[] inputBoxes;
-    private final JCheckBox outputBox;
-    private final Image image;
+
+    private final JCheckBox inputA;
+    private final JCheckBox inputB;
+    private final Switch SWA;
+    private final Switch SWB;
+    private final JCheckBox output;
 
     public GateView(Gate gate) {
-        super(BORDER + SWITCH_SIZE + GATE_WIDTH + SWITCH_SIZE + BORDER, GATE_HEIGHT);
-
         this.gate = gate;
 
-        int inputSize = gate.getInputSize();
+        inputA = new JCheckBox();
+        inputB = new JCheckBox();
+        SWA = new Switch();
+        SWB = new Switch();
+        output = new JCheckBox();
 
-        switches = new Switch[inputSize];
-        inputBoxes = new JCheckBox[inputSize];
+        JLabel LinputA = new JLabel("Entrada A");
+        JLabel LinputB = new JLabel("Entrada B");
+        JLabel Loutput = new JLabel("Saída");
 
-        for (int i = 0; i < inputSize; i++) {
-            switches[i] = new Switch();
-            inputBoxes[i] = new JCheckBox();
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-            gate.connect(i, switches[i]);
+        if (gate.getInputSize() == 2) {
+            add(LinputA);
+            add(inputA);
+
+            add(LinputB);
+            add(inputB);
+        } else {
+            add(LinputA);
+            add(inputA);
         }
+        add(Loutput);
+        add(output);
 
-        outputBox = new JCheckBox();
+        inputA.addActionListener(this);
+        inputB.addActionListener(this);
 
-        int x, y, step;
+        output.setEnabled(false);
 
-        x = BORDER;
-        y = -(SWITCH_SIZE / 2);
-        step = (GATE_HEIGHT / (inputSize + 1));
-        for (JCheckBox inputBox : inputBoxes) {
-            y += step;
-            add(inputBox, x, y, SWITCH_SIZE, SWITCH_SIZE);
-        }
-
-        add(outputBox, BORDER + SWITCH_SIZE + GATE_WIDTH, (GATE_HEIGHT - SWITCH_SIZE) / 2, SWITCH_SIZE, SWITCH_SIZE);
-
-        String name = gate.toString() + ".png";
-        URL url = getClass().getClassLoader().getResource(name);
-        image = getToolkit().getImage(url);
-
-        for (JCheckBox inputBox : inputBoxes) {
-            inputBox.addItemListener(this);
-        }
-
-        outputBox.setEnabled(false);
 
         update();
     }
 
     private void update() {
-        for (int i = 0; i < gate.getInputSize(); i++) {
-            if (inputBoxes[i].isSelected()) {
-                switches[i].turnOn();
-            } else {
-                switches[i].turnOff();
-            }
+
+        if (inputA.isSelected()) {
+            SWA.turnOn();
         }
+        if (inputB.isSelected()) {
+            SWB.turnOn();
+        }
+        if (gate.getInputSize() == 2) {
+            gate.connect(0, SWA);
+            gate.connect(1, SWB);
+        } else {
+            gate.connect(0, SWA);
+        }
+        output.setSelected(gate.read());
 
-        boolean result = gate.read();
-
-        outputBox.setSelected(result);
     }
 
     @Override
-    public void itemStateChanged(ItemEvent event) {
+    public void actionPerformed(ActionEvent event) {
         update();
     }
-
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        g.drawImage(image, BORDER + SWITCH_SIZE, 0, GATE_WIDTH, GATE_HEIGHT, this);
-
-        getToolkit().sync();
-    }
 }
+
