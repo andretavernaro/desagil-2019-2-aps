@@ -63,8 +63,14 @@ public class GateView extends JPanel implements ActionListener {
         if (inputA.isSelected()) {
             SWA.turnOn();
         }
+        else{
+            SWA.turnOff();
+        }
         if (inputB.isSelected()) {
             SWB.turnOn();
+        }
+        else{
+            SWB.turnOff();
         }
         if (gate.getInputSize() == 2) {
             gate.connect(0, SWA);
